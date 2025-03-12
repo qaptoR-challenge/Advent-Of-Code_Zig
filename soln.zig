@@ -1,22 +1,28 @@
 const std = @import("std");
 
 const Allocator = std.mem.Allocator;
+const SHMap = std.StringHashMap;
+const AList = std.ArrayList;
 
-const TEST_FILE = "D:/Files/advent/2024/day00/test00.txt";
-const DATA_FILE = "D:/Files/advent/2024/day00/data00.txt";
+const DATA_FILE = ( // zig fmt: off
+    // "D:/Files/advent/2024/day00/test01.txt"
+    // "D:/Files/advent/2024/day00/data.txt"
+    "/Users/rocco/Programming/advent_zig/2024/day00/test01.txt"
+    // "/Users/rocco/Programming/advent_zig/2024/day00/data.txt"
+); // zig fmt: on
 
-fn loadData(allocator: Allocator, filename: []const u8) !std.ArrayList([]const u8) {
+fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
     const file = try std.fs.cwd().openFile(filename, .{});
     defer file.close();
-    const content = try file.readToEndAlloc(allocator, std.math.maxInt(u64));
-    defer allocator.free(content);
+    const content = try file.readToEndAlloc(alloc_, std.math.maxInt(u64));
+    defer alloc_.free(content);
 
-    var data = std.ArrayList([]const u8).init(allocator);
+    var data = AList([]const u8).init(alloc_);
 
     var rows = std.mem.splitSequence(u8, content, "\r\n");
     while (rows.next()) |row| {
         if (row.len == 0) continue;
-        var row_data = try std.ArrayList(i32).initCapacity(allocator, 2);
+        var row_data = try AList(i32).initCapacity(alloc_, 2);
         var cols = std.mem.splitSequence(u8, row, "   ");
 
         while (cols.next()) |col| {
@@ -28,7 +34,7 @@ fn loadData(allocator: Allocator, filename: []const u8) !std.ArrayList([]const u
     return data;
 }
 
-fn test_data1(allocator: Allocator, data: std.ArrayList([]const u8)) !void {
+fn test_data1(alloc_: Allocator, data_: AList([]const u8)) !void {
     const time_start = std.time.milliTimestamp();
 
     var sum: u32 = 0;
@@ -37,7 +43,7 @@ fn test_data1(allocator: Allocator, data: std.ArrayList([]const u8)) !void {
     std.debug.print("part 1: {d} time: {d}\n", .{ sum, time_end - time_start });
 }
 
-fn test_data2(allocator: Allocator, data: std.ArrayList([]const u8)) !void {
+fn test_data2(alloc_: Allocator, data_: AList([]const u8)) !void {
     const time_start = std.time.milliTimestamp();
 
     var sum: i32 = 0;
