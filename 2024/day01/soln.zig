@@ -7,6 +7,7 @@ const Allocator = std.mem.Allocator;
 const DATA_FILE = "/home/qaptor/Programming/zig/aoc_z/2024/day01/data.txt";
 
 fn loadData(allocator: Allocator, filename: []const u8) !AList(AList(i32)) {
+    const time_start = std.time.nanoTimestamp();
     const file = try std.fs.cwd().openFile(filename, .{});
     defer file.close();
     const content = try file.readToEndAlloc(allocator, std.math.maxInt(u64));
@@ -26,11 +27,13 @@ fn loadData(allocator: Allocator, filename: []const u8) !AList(AList(i32)) {
         try data.append(row_data);
     }
 
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("load data time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     return data;
 }
 
 fn test_data1(allocator: Allocator, data: AList(AList(i32))) !void {
-    const time_start = std.time.milliTimestamp();
+    const time_start = std.time.nanoTimestamp();
 
     var sum: u32 = 0;
     var lists = AList(AList(i32)).init(allocator);
@@ -54,12 +57,12 @@ fn test_data1(allocator: Allocator, data: AList(AList(i32))) !void {
         sum += @abs(a - b);
     }
 
-    const time_end = std.time.milliTimestamp();
-    std.debug.print("part 1: {d} time: {d}\n", .{ sum, time_end - time_start });
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
 fn test_data2(allocator: Allocator, data: AList(AList(i32))) !void {
-    const time_start = std.time.milliTimestamp();
+    const time_start = std.time.nanoTimestamp();
 
     var sum: i32 = 0;
 
@@ -86,18 +89,18 @@ fn test_data2(allocator: Allocator, data: AList(AList(i32))) !void {
         sum += a * b;
     }
 
-    const time_end = std.time.milliTimestamp();
-    std.debug.print("part 2: {d} time: {d}\n", .{ sum, time_end - time_start });
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("part 2: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
 pub fn main() !void {
+    const time_start = std.time.nanoTimestamp();
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
 
     std.debug.print("\nHello, Day 1!\n\n", .{});
 
-    // var data = try loadData(allocator, TEST_FILE);
     var data = try loadData(allocator, DATA_FILE);
     defer {
         for (data.list.items) |*row| {
@@ -109,5 +112,7 @@ pub fn main() !void {
     try test_data1(allocator, data);
     try test_data2(allocator, data);
 
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     std.debug.print("\nfin\n", .{});
 }

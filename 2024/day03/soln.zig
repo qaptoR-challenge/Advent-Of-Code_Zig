@@ -15,6 +15,7 @@ const DATA_FILE = ( // zig fmt: off
 ); // zig fmt: on
 
 fn loadData(allocator: Allocator, filename: []const u8) !MAList([]const u8) {
+    const time_start = std.time.nanoTimestamp();
     const file = try std.fs.cwd().openFile(filename, .{});
     defer file.close();
     const content = try file.readToEndAlloc(allocator, std.math.maxInt(u64));
@@ -28,11 +29,13 @@ fn loadData(allocator: Allocator, filename: []const u8) !MAList([]const u8) {
         try data.append(row);
     }
 
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("load data time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     return data;
 }
 
 fn test_data1(alloc_: Allocator, data_: MAList([]const u8)) !void {
-    const time_start = std.time.milliTimestamp();
+    const time_start = std.time.nanoTimestamp();
 
     var mulreg: Regex = try Regex.from(
         \\mul\(\d{1,3},\d{1,3}\)
@@ -53,12 +56,12 @@ fn test_data1(alloc_: Allocator, data_: MAList([]const u8)) !void {
         }
     }
 
-    const time_end = std.time.milliTimestamp();
-    std.debug.print("part 1: {d} time: {d}\n", .{ sum, time_end - time_start });
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
 fn test_data2(alloc_: Allocator, data_: MAList([]const u8)) !void {
-    const time_start = std.time.milliTimestamp();
+    const time_start = std.time.nanoTimestamp();
 
     var mulreg = try Regex.from(
         \\mul\(\d{1,3},\d{1,3}\)|do\(\)|don't\(\)
@@ -89,11 +92,12 @@ fn test_data2(alloc_: Allocator, data_: MAList([]const u8)) !void {
         }
     }
 
-    const time_end = std.time.milliTimestamp();
-    std.debug.print("part 2: {d} time: {d}\n", .{ sum, time_end - time_start });
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("part 2: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
 pub fn main() !void {
+    const time_start = std.time.nanoTimestamp();
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
@@ -105,5 +109,7 @@ pub fn main() !void {
     try test_data1(allocator, data);
     try test_data2(allocator, data);
 
+    const time_end = std.time.nanoTimestamp();
+    std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     std.debug.print("\nfin\n", .{});
 }
