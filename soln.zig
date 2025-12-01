@@ -5,9 +5,7 @@ const SHMap = std.StringHashMap;
 const AList = std.ArrayList;
 
 const DATA_FILE = ( // zig fmt: off
-    // "D:/Files/advent/2024/day00/test01.txt"
-    // "D:/Files/advent/2024/day00/data.txt"
-    "/Users/rocco/Programming/advent_zig/2024/day00/test01.txt"
+    "/home/qaptor/Programming/zig/aoc_z/2024/day01/data.txt"
     // "/Users/rocco/Programming/advent_zig/2024/day00/data.txt"
 ); // zig fmt: on
 

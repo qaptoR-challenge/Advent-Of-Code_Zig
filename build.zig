@@ -15,28 +15,24 @@ pub fn build(b: *std.Build) void {
     // Add an executable target for the specified day's script
     const exe = b.addExecutable(.{
         .name = "aocZig",
-        .root_source_file = b.path(script_opt),
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path(script_opt),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
 
     const qp_engine = b.dependency("qpEngine", .{
-        // .version = "0.0.1",
         .target = target,
         .optimize = optimize,
     });
-
-    // const exe_mod = b.createModule(.{
-    // .root_source_file = b.path("src/main.zig"),
-    // .target = target,
-    // .optimize = optimize,
-    // });
     exe.root_module.addImport("qpEngine", qp_engine.module("qpEngine"));
 
-    // const exe = b.addExecutable(.{
-    // .name = "advent_zig",
-    // .root_module = exe_mod,
-    // });
+    const orcz = b.dependency("orcz", .{
+        .target = target,
+        .optimize = optimize,
+    });
+    exe.root_module.addImport("orcz", orcz.module("orcz"));
 
     b.installArtifact(exe);
     const run_cmd = b.addRunArtifact(exe);
