@@ -23,7 +23,7 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
     }
 
     const time_end = std.time.nanoTimestamp();
-    std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
+    std.debug.print("load data time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     return data;
 }
 
