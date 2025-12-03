@@ -41,17 +41,17 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList(Range) {
     return data;
 }
 
-fn test_data1(alloc_: Allocator, data_: AList(Range)) !void {
+fn puzzle1(alloc_: Allocator, data_: AList(Range)) !void {
     const time_start = std.time.nanoTimestamp();
 
     var sum: u64 = 0;
-
+    var buf: [256]u8 = undefined;
+    var idreg: Regex = try Regex.from(
+        \\^(\d+)\1$
+    , false, alloc_);
     for (data_.items()) |item| {
         for (item.start..item.end + 1) |id| {
-            const ids: []const u8 = try std.fmt.allocPrint(alloc_, "{d}", .{id});
-            var idreg: Regex = try Regex.from(
-                \\^(\d+)\1$
-            , false, alloc_);
+            const ids: []const u8 = try std.fmt.bufPrint(&buf, "{d}", .{id});
             const idmatch: ?RegexMatch = idreg.search(ids, null, null);
             if (idmatch != null) {
                 sum += id;
@@ -63,17 +63,18 @@ fn test_data1(alloc_: Allocator, data_: AList(Range)) !void {
     std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
-fn test_data2(alloc_: Allocator, data_: AList(Range)) !void {
+fn puzzle2(alloc_: Allocator, data_: AList(Range)) !void {
     const time_start = std.time.nanoTimestamp();
 
     var sum: u64 = 0;
+    var buf: [256]u8 = undefined;
+    var idreg: Regex = try Regex.from(
+        \\^(\d+)\1+$
+    , false, alloc_);
 
     for (data_.items()) |item| {
         for (item.start..item.end + 1) |id| {
-            const ids: []const u8 = try std.fmt.allocPrint(alloc_, "{d}", .{id});
-            var idreg: Regex = try Regex.from(
-                \\^(\d+)\1+$
-            , false, alloc_);
+            const ids: []const u8 = try std.fmt.bufPrint(&buf, "{d}", .{id});
             const idmatch: ?RegexMatch = idreg.search(ids, null, null);
             if (idmatch != null) {
                 sum += id;
@@ -87,7 +88,7 @@ fn test_data2(alloc_: Allocator, data_: AList(Range)) !void {
 
 pub fn main() !void {
     const time_start = std.time.nanoTimestamp();
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    var arena = std.heap.ArenaAllocator.init(std.heap.smp_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
 
@@ -98,8 +99,8 @@ pub fn main() !void {
         data.deinit();
     }
 
-    try test_data1(allocator, data);
-    try test_data2(allocator, data);
+    try puzzle1(allocator, data);
+    try puzzle2(allocator, data);
 
     const time_end = std.time.nanoTimestamp();
     std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});

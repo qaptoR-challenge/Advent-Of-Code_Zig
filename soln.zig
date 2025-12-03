@@ -5,8 +5,8 @@ const SHMap = std.StringHashMap;
 const AList = @import("orcz").ManagedArrayList;
 
 const DATA_FILE = ( // zig fmt: off
-    "/home/qaptor/Programming/zig/aoc_z/2024/day01/data.txt"
-    // "/Users/rocco/Programming/advent_zig/2024/day00/data.txt"
+    "/home/qaptor/Programming/zig/aoc_z/20$$/day@@/data.txt"
+    // "/Users/rocco/Programming/advent_zig/20$$/day@@/data.txt"
 ); // zig fmt: on
 
 fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
@@ -14,7 +14,7 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
     const file = try std.fs.cwd().openFile(filename, .{});
     defer file.close();
     const content = std.mem.trimRight(u8, try file.readToEndAlloc(alloc_, std.math.maxInt(u64)), "\n");
-    defer alloc_.free(content);
+    // defer alloc_.free(content);
 
     var data = AList([]const u8).init(alloc_);
     var rows = std.mem.splitSequence(u8, content, "\n");
@@ -27,7 +27,7 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
     return data;
 }
 
-fn test_data1(alloc_: Allocator, data_: AList([]const u8)) !void {
+fn puzzle1(alloc_: Allocator, data_: AList([]const u8)) !void {
     const time_start = std.time.nanoTimestamp();
     _ = alloc_;
     _ = data_;
@@ -39,7 +39,7 @@ fn test_data1(alloc_: Allocator, data_: AList([]const u8)) !void {
     std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
-fn test_data2(alloc_: Allocator, data_: AList([]const u8)) !void {
+fn puzzle2(alloc_: Allocator, data_: AList([]const u8)) !void {
     const time_start = std.time.nanoTimestamp();
     _ = alloc_;
     _ = data_;
@@ -53,11 +53,11 @@ fn test_data2(alloc_: Allocator, data_: AList([]const u8)) !void {
 
 pub fn main() !void {
     const time_start = std.time.nanoTimestamp();
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    var arena = std.heap.ArenaAllocator.init(std.heap.smp_allocator);
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    std.debug.print("\nHello, Day 00!\n\n", .{});
+    std.debug.print("\nHello, 20$$ Day @@!\n\n", .{});
 
     var data = try loadData(allocator, DATA_FILE);
     defer {
@@ -67,8 +67,8 @@ pub fn main() !void {
         data.deinit();
     }
 
-    try test_data1(allocator, data);
-    try test_data2(allocator, data);
+    try puzzle1(allocator, data);
+    try puzzle2(allocator, data);
 
     const time_end = std.time.nanoTimestamp();
     std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});

@@ -32,7 +32,7 @@ fn loadData(allocator: Allocator, filename: []const u8) !AList(AList(i32)) {
     return data;
 }
 
-fn test_data1(allocator: Allocator, data: AList(AList(i32))) !void {
+fn puzzle1(allocator: Allocator, data: AList(AList(i32))) !void {
     const time_start = std.time.nanoTimestamp();
 
     var sum: u32 = 0;
@@ -61,7 +61,7 @@ fn test_data1(allocator: Allocator, data: AList(AList(i32))) !void {
     std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
-fn test_data2(allocator: Allocator, data: AList(AList(i32))) !void {
+fn puzzle2(allocator: Allocator, data: AList(AList(i32))) !void {
     const time_start = std.time.nanoTimestamp();
 
     var sum: i32 = 0;
@@ -109,8 +109,8 @@ pub fn main() !void {
         data.deinit();
     }
 
-    try test_data1(allocator, data);
-    try test_data2(allocator, data);
+    try puzzle1(allocator, data);
+    try puzzle2(allocator, data);
 
     const time_end = std.time.nanoTimestamp();
     std.debug.print("overall time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});

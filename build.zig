@@ -34,6 +34,13 @@ pub fn build(b: *std.Build) void {
     });
     exe.root_module.addImport("orcz", orcz.module("orcz"));
 
+    const aoc_lib = b.addModule("aocLib", .{
+        .root_source_file = b.path("src/aoc.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    exe.root_module.addImport("aoc", aoc_lib);
+
     b.installArtifact(exe);
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
