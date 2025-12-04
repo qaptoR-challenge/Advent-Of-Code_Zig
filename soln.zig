@@ -22,9 +22,15 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
         try data.append(row);
     }
 
+    // try printData(data);
+
     const time_end = std.time.nanoTimestamp();
     std.debug.print("load data time: {D}\n", .{@as(i64, @intCast(time_end - time_start))});
     return data;
+}
+
+fn printData(data_: AList([]const u8)) !void {
+    _ = data_;
 }
 
 fn puzzle1(alloc_: Allocator, data_: AList([]const u8)) !void {
