@@ -4,22 +4,21 @@ const Allocator = std.mem.Allocator;
 const SHMap = std.StringHashMap;
 const AList = @import("orcz").ManagedArrayList;
 
-const DATA_FILE = ( // zig fmt: off
-    "/home/qaptor/Programming/zig/aoc_z/20$$/day@@/data.txt"
-    // "/Users/rocco/Programming/advent_zig/20$$/day@@/data.txt"
-); // zig fmt: on
+const input: []const u8 = @embedFile("data.txt");
+const Data = struct {
+    first: AList([]const u8),
+};
 
-fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
+fn loadData(alloc_: Allocator) !Data {
     const time_start = std.time.nanoTimestamp();
-    const file = try std.fs.cwd().openFile(filename, .{});
-    defer file.close();
-    const content = std.mem.trimRight(u8, try file.readToEndAlloc(alloc_, std.math.maxInt(u64)), "\n");
-    // defer alloc_.free(content);
+    const content = std.mem.trimRight(u8, input, "\n");
 
-    var data = AList([]const u8).init(alloc_);
+    var data: Data = .{
+        .first = AList([]const u8).init(alloc_),
+    };
     var rows = std.mem.splitSequence(u8, content, "\n");
     while (rows.next()) |row| {
-        try data.append(row);
+        try data.first.append(row);
     }
 
     // try printData(data);
@@ -29,11 +28,11 @@ fn loadData(alloc_: Allocator, filename: []const u8) !AList([]const u8) {
     return data;
 }
 
-fn printData(data_: AList([]const u8)) !void {
+fn printData(data_: Data) !void {
     _ = data_;
 }
 
-fn puzzle1(alloc_: Allocator, data_: AList([]const u8)) !void {
+fn puzzle1(alloc_: Allocator, data_: Data) !void {
     const time_start = std.time.nanoTimestamp();
     _ = alloc_;
     _ = data_;
@@ -45,7 +44,7 @@ fn puzzle1(alloc_: Allocator, data_: AList([]const u8)) !void {
     std.debug.print("part 1: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
-fn puzzle2(alloc_: Allocator, data_: AList([]const u8)) !void {
+fn puzzle2(alloc_: Allocator, data_: Data) !void {
     const time_start = std.time.nanoTimestamp();
     _ = alloc_;
     _ = data_;
@@ -65,12 +64,12 @@ pub fn main() !void {
 
     std.debug.print("\nHello, 20$$ Day @@!\n\n", .{});
 
-    var data = try loadData(allocator, DATA_FILE);
+    var data = try loadData(allocator);
     defer {
         // for (data.items) |row| {
         //     row.deinit();
         // }
-        data.deinit();
+        data.first.deinit();
     }
 
     try puzzle1(allocator, data);

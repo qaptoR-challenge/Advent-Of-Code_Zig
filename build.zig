@@ -10,7 +10,7 @@ pub fn build(b: *std.Build) void {
     //
     // const path = b.fmt("{d}/day{d}/soln.zig", .{ year_option, day_option });
 
-    const script_opt = b.option([]const u8, "script", "Specify the script to run") orelse "src/main.zig";
+    const script_opt = b.option([]const u8, "script", "Specify the script to run") orelse "main.zig";
 
     // Add an executable target for the specified day's script
     const exe = b.addExecutable(.{

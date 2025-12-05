@@ -177,7 +177,7 @@ fn puzzle3(alloc_: Allocator, data_: *HMap) !void {
     }
 
     const time_end = std.time.nanoTimestamp();
-    std.debug.print("part 2: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
+    std.debug.print("part 3: {d} time: {D}\n", .{ sum, @as(i64, @intCast(time_end - time_start)) });
 }
 
 pub fn main() !void {
