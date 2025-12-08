@@ -41,6 +41,14 @@ pub fn build(b: *std.Build) void {
     });
     exe.root_module.addImport("aoc", aoc_lib);
 
+    const lib_tests = b.addTest(.{
+        .root_module = aoc_lib,
+    });
+    const run_lib_tests = b.addRunArtifact(lib_tests);
+
+    const test_step = b.step("test", "Run tests");
+    test_step.dependOn(&run_lib_tests.step);
+
     b.installArtifact(exe);
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
