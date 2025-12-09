@@ -81,7 +81,9 @@ fn puzzle2(alloc_: Allocator, data_: Data) !void {
     var remove: AList(Beam) = .init(alloc_);
     const idx0: usize = std.mem.indexOfScalar(u8, data_.lines.items()[0], 'S').?;
     _ = try set.put(idx0, 1);
+    // var i: usize = 2;
     for (2..data_.lines.len()) |i| {
+        // while (i < data_.lines.len()) : (i += 2) {
         insert.clearRetainingCapacity();
         remove.clearRetainingCapacity();
         if (i % 2 == 1) continue;
