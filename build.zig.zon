@@ -9,8 +9,8 @@
 
     .dependencies = .{
         .qpEngine = .{
-            .url = "https://github.com/qpEngine/qpEngine/archive/refs/tags/v0.0.2.tar.gz",
-            .hash = "qpEngine-0.0.1-zJeis1x9AQCE1noHZnPAmlVvoEZqUgKCcsHE67UXYc7r",
+            .url = "https://github.com/qpEngine/qpEngine/archive/refs/tags/v0.0.7.tar.gz",
+            .hash = "qpEngine-0.0.1-zJeisxWlAQAtqi7KtH-0ZbP1jSJPXERcaR7hmTrz8EXV",
         },
         .orcz = .{
             .url = "https://github.com/qaptoR-zig/ORCz/archive/refs/tags/v0.0.2.tar.gz",
