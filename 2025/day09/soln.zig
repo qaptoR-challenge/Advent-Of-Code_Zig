@@ -129,7 +129,7 @@ pub fn main() !void {
     defer arena.deinit();
     const allocator = arena.allocator();
 
-    std.debug.print("\nHello, 20$$ Day @@!\n\n", .{});
+    std.debug.print("\nHello, 2025 Day 09!\n\n", .{});
 
     const data = try loadData(allocator);
 
