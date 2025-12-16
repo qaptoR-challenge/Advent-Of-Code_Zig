@@ -107,22 +107,18 @@ fn puzzle2(alloc_: Allocator, data_: Data) !void {
 
     var stack: AList(Node2) = .init(alloc_);
     var memo: std.AutoHashMap(Memo, u64) = .init(alloc_);
-
-    // Stack to track partial sums for each level
     var sum_stack: AList(u64) = .init(alloc_);
 
     try stack.append(.{ .name = start, .state = .{ .fft = false, .dac = false }, .pop = false });
     try sum_stack.append(0);
 
     while (stack.pop()) |node| {
-        // Update state based on current node
         var current_state = node.state;
         current_state.fft = current_state.fft or std.mem.eql(u8, node.name, "fft");
         current_state.dac = current_state.dac or std.mem.eql(u8, node.name, "dac");
 
         var hasher = std.hash.Wyhash.init(0);
         std.hash.autoHashStrat(&hasher, node.name, .Deep);
-        // const key: Memo = .{ .name = hasher.final(), .fft = current_state.fft, .dac = current_state.dac };
         const key: Memo = .{ .name = hasher.final(), .state = current_state };
 
         if (node.pop) {
